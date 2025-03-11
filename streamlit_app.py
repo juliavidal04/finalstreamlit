@@ -91,14 +91,15 @@ if st.button("Show a chart", key="show_chart"):
 # ============================== #
 #  Measure User Response Time
 # ============================== #
-if st.session_state["
-
+# Ensure the key exists in session state before fetching data
+if "google_sheets_data" not in st.session_state:
     client = gspread.authorize(creds)
     sheet = client.open("hola2").sheet1  # Make sure your Google Sheet is named "hola2"
     data = sheet.get_all_records()
-    return pd.DataFrame(data)
+    st.session_state["google_sheets_data"] = pd.DataFrame(data)  # Store data in session state
 
-df = fetch_google_sheets_data()
+df = st.session_state["google_sheets_data"]  # Use cached data
+
 
 # ============================== #
 #  Streamlit UI
